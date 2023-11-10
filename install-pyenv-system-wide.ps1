@@ -31,11 +31,11 @@ $binPath = "${pyenvWinDir}\bin"
 $shimsPath = "${pyenvWinDir}\shims"
 
 Function Remove-PyEnvVars {
-    $pathParts = [System.Environment]::GetEnvironmentVariable('Path', "Machine") -split ";"
+    $pathParts = [System.Environment]::GetEnvironmentVariable('PATH', "Machine") -Split ";"
     $newPathParts = $pathParts.Where{ $_ -ne $binPath }.Where{ $_ -ne $shimsPath }
     # $newPathParts = $pathParts | Where-Object { $_ -inotmatch 'pyenv-win' } # Alternative way of getting parts
-    $newPath = $newPathParts -join ";"
-    [System.Environment]::SetEnvironmentVariable('Path', $newPath, "Machine")
+    $newPath = $newPathParts -Join ";"
+    [System.Environment]::SetEnvironmentVariable('PATH', $newPath, "Machine")
 
     [System.Environment]::SetEnvironmentVariable('PYENV', $null, "Machine")
     [System.Environment]::SetEnvironmentVariable('PYENV_ROOT', $null, "Machine")
@@ -58,14 +58,17 @@ Function Install-PyEnv {
     git clone https://github.com/pyenv-win/pyenv-win.git $pyenvSystemPath
 
     # Update environment variables
-    [System.Environment]::SetEnvironmentVariable('PYENV', "$pyenvWinDir\", "Machine")
-    [System.Environment]::SetEnvironmentVariable('PYENV_ROOT', "$pyenvWinDir\", "Machine")
-    [System.Environment]::SetEnvironmentVariable('PYENV_HOME', "$pyenvWinDir\", "Machine")
+    [System.Environment]::SetEnvironmentVariable('PYENV', "${pyenvWinDir}\", "Machine")
+    [System.Environment]::SetEnvironmentVariable('PYENV_ROOT', "${pyenvWinDir}\", "Machine")
+    [System.Environment]::SetEnvironmentVariable('PYENV_HOME', "${pyenvWinDir}\", "Machine")
 
-    $pathParts = [System.Environment]::GetEnvironmentVariable('Path', "Machine") -split ";"
+    $pathParts = [System.Environment]::GetEnvironmentVariable('PATH', "Machine") -Split ";"
+
+    # Remove existing paths, so we don't add duplicates
+    $newPathParts = $pathParts.Where{ $_ -ne $binPath }.Where{ $_ -ne $shimsPath }
     $newPathParts = ($binPath, $shimsPath) + $pathParts
-    $newPath = $newPathParts -join ";"
-    [System.Environment]::SetEnvironmentVariable('Path', $newPath, "Machine")
+    $newPath = $newPathParts -Join ";"
+    [System.Environment]::SetEnvironmentVariable('PATH', $NewPath, "Machine")
 
     Write-Host "pyenv-win is successfully installed."
 }

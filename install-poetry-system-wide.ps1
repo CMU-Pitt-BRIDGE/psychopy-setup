@@ -31,7 +31,6 @@ $poetryWrapper = "$poetryHome\venv\Scripts\poetry"
 
 Function Remove-PoetryVars {
     $pathParts = [System.Environment]::GetEnvironmentVariable('Path', "Machine") -split ";"
-    $newPathParts = $pathParts.Where{ $_ -notmatch 'Poetry' }
     # $newPathParts = $pathParts | Where-Object { $_ -inotmatch 'Python\\Scripts' } # Alternative way of getting parts
 
     $newPath = $newPathParts -join ";"
@@ -42,6 +41,7 @@ Function Remove-Poetry {
     Write-Host "Removing Poetry..."
     If (Test-Path $poetryHome) {
         Remove-Item -Path $poetryHome -Recurse
+        # Have to remove Poetry Wrapper as well
     }
     Write-Host "Removing Poetry from PATH..."
     Remove-PoetryVars

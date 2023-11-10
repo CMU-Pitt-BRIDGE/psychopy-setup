@@ -32,7 +32,7 @@ $shimsPath = "${pyenvWinDir}\shims"
 
 Function Remove-PyEnvVars {
     $pathParts = [System.Environment]::GetEnvironmentVariable('Path', "Machine") -split ";"
-    $newPathParts = $pathParts.Where{ $_ -notmatch $pyenvWinDir }
+    $newPathParts = $pathParts.Where{ $_ -ne $pyenvWinDir }
     $newPath = $newPathParts -join ";"
     [System.Environment]::SetEnvironmentVariable('Path', $newPath, "Machine")
 

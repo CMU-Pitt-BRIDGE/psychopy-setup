@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "PsychoPyProject"
+version = "0.1.0"
+description = "A project for PsychoPy 2023.2.3 with Python 3.8.10"
+authors = ["Eduardo Diniz <edd32@pitt.edu>"]
+
+[tool.poetry.dependencies]
+python = "3.8.10"
+pyqt5 = "5.15.2"
+psychopy = {extras = ["all"], version = "2023.2.3"}
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

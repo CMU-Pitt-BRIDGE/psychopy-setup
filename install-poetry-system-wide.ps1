@@ -47,9 +47,8 @@ Function Remove-Poetry {
 Function Install-Poetry {
     Write-Host "Installing Poetry..."
     New-Item -Path $poetryHome -ItemType Directory -Force
-    $env:POETRY_HOME = $poetryHome
-    Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing | Invoke-Expression
-
+    (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | $env:POETRY_HOME=$poetryHome python -
+    
     # Update PATH
     $systemPath = [System.Environment]::GetEnvironmentVariable('Path', "Machine")
     $newPath = "$poetryPath;" + $systemPath

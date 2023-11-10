@@ -25,7 +25,7 @@ param (
     [Switch] $Uninstall = $False
 )
 
-$pyenvSystemPath = "C:\ProgramData\pyenv"
+$pyenvSystemPath = "C:\Program Files\pyenv"
 $pyenvWinDir = "${pyenvSystemPath}\pyenv-win"
 $binPath = "${pyenvWinDir}\bin"
 $shimsPath = "${pyenvWinDir}\shims"
@@ -55,12 +55,7 @@ Function Install-PyEnv {
     Write-Host "Installing pyenv-win..."
     New-Item -Path $pyenvSystemPath -ItemType Directory -Force
 
-    $downloadPath = "$pyenvSystemPath\pyenv-win.zip"
-    (New-Object System.Net.WebClient).DownloadFile("https://github.com/pyenv-win/pyenv-win/archive/master.zip", $downloadPath)
-    Expand-Archive -Path $downloadPath -DestinationPath $pyenvSystemPath
-    Move-Item -Path "$pyenvSystemPath\pyenv-win-master\*" -Destination "$pyenvSystemPath"
-    Remove-Item -Path "$pyenvSystemPath\pyenv-win-master" -Recurse
-    Remove-Item -Path $downloadPath
+    git clone https://github.com/pyenv-win/pyenv-win.git "$pyenvSystemPath\.pyenv"
 
     # Update environment variables
     [System.Environment]::SetEnvironmentVariable('PYENV', "$pyenvWinDir\", "Machine")

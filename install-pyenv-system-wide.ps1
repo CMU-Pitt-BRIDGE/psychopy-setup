@@ -66,7 +66,7 @@ Function Install-PyEnv {
 
     # Remove existing paths, so we don't add duplicates
     $newPathParts = $pathParts.Where{ $_ -ne $binPath }.Where{ $_ -ne $shimsPath }
-    $newPathParts = ($binPath, $shimsPath) + $pathParts
+    $newPathParts = ($binPath, $shimsPath) + $newPathParts
     $newPath = $newPathParts -Join ";"
     [System.Environment]::SetEnvironmentVariable('PATH', $NewPath, "Machine")
 

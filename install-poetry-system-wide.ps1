@@ -31,9 +31,10 @@ $poetryWrapper = "$poetryHome\venv\Scripts\poetry"
 
 Function Remove-PoetryVars {
     $pathParts = [System.Environment]::GetEnvironmentVariable('Path', "Machine") -split ";"
-    # $newPathParts = $pathParts | Where-Object { $_ -inotmatch 'Python\\Scripts' } # Alternative way of getting parts
+    $newPathParts = $pathParts | Where-Object { $_ -inotmatch 'Python\\Scripts' } # Alternative way of getting parts
 
     $newPath = $newPathParts -join ";"
+    [System.Environment]::SetEnvironmentVariable('POETRY_HOME', $null, "Machine")
     [System.Environment]::SetEnvironmentVariable('Path', $newPath, "Machine")
 }
 
@@ -50,6 +51,9 @@ Function Remove-Poetry {
 Function Install-Poetry {
     Write-Host "Installing Poetry..."
     New-Item -Path $poetryHome -ItemType Directory -Force
+    
+    [System.Environment]::SetEnvironmentVariable('POETRY_HOME', ${poetryHome}\, "Machine")
+
     (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | $env:POETRY_HOME=$poetryHome python -
     
     # Update PATH

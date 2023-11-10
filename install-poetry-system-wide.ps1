@@ -52,7 +52,7 @@ Function Install-Poetry {
     Write-Host "Installing Poetry..."
     New-Item -Path $poetryHome -ItemType Directory -Force
     
-    [System.Environment]::SetEnvironmentVariable('POETRY_HOME', ${poetryHome}\, "Machine")
+    [System.Environment]::SetEnvironmentVariable('POETRY_HOME', "${poetryHome}\", "Machine")
 
     (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | $env:POETRY_HOME=$poetryHome python -
     

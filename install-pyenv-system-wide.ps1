@@ -55,7 +55,7 @@ Function Install-PyEnv {
     Write-Host "Installing pyenv-win..."
     New-Item -Path $pyenvSystemPath -ItemType Directory -Force
 
-    git clone https://github.com/pyenv-win/pyenv-win.git "$pyenvSystemPath\.pyenv"
+    git clone https://github.com/pyenv-win/pyenv-win.git $pyenvSystemPath
 
     # Update environment variables
     [System.Environment]::SetEnvironmentVariable('PYENV', "$pyenvWinDir\", "Machine")

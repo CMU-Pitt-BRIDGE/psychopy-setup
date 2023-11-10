@@ -25,8 +25,9 @@ param (
     [Switch] $Uninstall = $False
 )
 
-$poetryHome = "C:\ProgramData\Poetry"
+$poetryHome = "C:\Program Files\pypoetry"
 $poetryPath = "$poetryHome\venv\Scripts\poetry"
+$poetryWrapper = "$poetryHome\venv\Scripts\poetry"
 
 Function Remove-PoetryVars {
     $pathParts = [System.Environment]::GetEnvironmentVariable('Path', "Machine") -split ";"

@@ -111,14 +111,6 @@ build-backend = "poetry.core.masonry.api"
         Exit
     }
     
-    # Activate local virtual environment    
-    Write-Host "Activating local virtual environment..."
-    poetry shell
-    if ($LASTEXITCODE -ne 0) {
-        Write-Error "Failed to activate local virtual environment."
-        Exit
-    }   
-
     # Installing dependencies
     Write-Host "Installing dependencies..."
     poetry install --no-root

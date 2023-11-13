@@ -16,8 +16,8 @@
 #>
 
 param (
-    [string] $ScriptPath,
-    [string] $ProjectDir
+    [string] $ScriptPath = "$([Environment]::GetFolderPath('MyDocuments'))\Scripts\run-psychopy.ps1",
+    [string] $ProjectDir = "$([Environment]::GetFolderPath('UserProfile'))\psychopy_project"
 )
 
 Function Create-Shortcut {

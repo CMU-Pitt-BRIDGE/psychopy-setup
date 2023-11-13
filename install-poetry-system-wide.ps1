@@ -54,7 +54,7 @@ Function Install-Poetry {
     
     [System.Environment]::SetEnvironmentVariable('POETRY_HOME', "${poetryHome}\", "Machine")
 
-    (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | $env:POETRY_HOME=$poetryHome python -
+    (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -
     
     # Update PATH
     $systemPath = [System.Environment]::GetEnvironmentVariable('Path', "Machine")

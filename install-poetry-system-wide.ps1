@@ -26,7 +26,7 @@ param (
 )
 
 $poetryHome = "C:\Program Files\pypoetry"
-$poetryPath = "$poetryHome\venv\Scripts"
+$poetryPath = "${poetryHome}\venv\Scripts"
 
 Function Remove-PoetryVars {
     $pathParts = [System.Environment]::GetEnvironmentVariable('Path', "Machine") -split ";"
@@ -56,12 +56,12 @@ Function Install-Poetry {
     (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -
     
     # Update PATH 
-    $pathParts = [System.Environment]::GetEnvironmentVariable('PATH', "Machine") -Split ";"
+    $pathParts = [System.Environment]::GetEnvironmentVariable('PATH', "Machine") -split ";"
     # Remove existing paths, so we don't add duplicates
     $newPathParts = $pathParts.Where{ $_ -ne $poetryPath }
-    $newPathParts = ($poetryPath) + $newPathParts
-    $newPath = $newPathParts -Join ";"
-    [System.Environment]::SetEnvironmentVariable('PATH', $NewPath, "Machine")
+    $newPathParts = @($poetryPath) + $newPathParts
+    $newPath = $newPathParts -join ";"
+    [System.Environment]::SetEnvironmentVariable('PATH', $newPath, "Machine")
 
     Write-Host "Poetry is successfully installed."
 }

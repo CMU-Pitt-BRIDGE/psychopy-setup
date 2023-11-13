@@ -102,20 +102,28 @@ build-backend = "poetry.core.masonry.api"
         Write-Error "Failed to create pyproject.toml."
         Exit
     }
-
-    # Installing dependencies
-    Write-Host "Installing dependencies..."
-    poetry install --no-root
-    if ($LASTEXITCODE -ne 0) {
-        Write-Error "Failed to install dependencies."
-        Exit
-    }
     
     # Setup local virtual environment    
     Write-Host "Creating local virtual environment..."
     poetry config virtualenvs.create true --local
     if ($LASTEXITCODE -ne 0) {
         Write-Error "Failed to set local virtual environment creation."
+        Exit
+    }
+    
+    # Activate local virtual environment    
+    Write-Host "Activating local virtual environment..."
+    poetry shell
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Failed to activate local virtual environment."
+        Exit
+    }   
+
+    # Installing dependencies
+    Write-Host "Installing dependencies..."
+    poetry install --no-root
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Failed to install dependencies."
         Exit
     }
 

@@ -97,7 +97,7 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 "@
 
-    Set-Content -Path ".\$projectName\pyproject.toml" -Value $pyprojectContent
+    Set-Content -Path ".\pyproject.toml" -Value $pyprojectContent
     if ($LASTEXITCODE -ne 0) {
         Write-Error "Failed to create pyproject.toml."
         Exit

@@ -17,7 +17,7 @@
 #>
 
 param (
-    [string] $ProjectDir
+    [string] $ProjectDir = "$([Environment]::GetFolderPath('UserProfile'))\psychopy_project"
 )
 
 Function Start-PsychoPy {

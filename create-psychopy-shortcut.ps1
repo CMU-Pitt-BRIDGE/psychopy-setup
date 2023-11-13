@@ -23,14 +23,23 @@ param (
 Function Create-Shortcut {
     $desktopPath = [Environment]::GetFolderPath("Desktop")
     $shortcutPath = Join-Path $desktopPath "Run PsychoPy.lnk"
+    $vbscriptPath = Join-Path $desktopPath "create_shortcut.vbs"
 
-    $WshShell = New-Object -ComObject WScript.Shell
-    $Shortcut = $WshShell.CreateShortcut($shortcutPath)
-    $Shortcut.TargetPath = "powershell.exe"
-    $Shortcut.Arguments = "-NoProfile -WindowStyle Minimized -ExecutionPolicy Bypass -File `"$ScriptPath`" -ProjectDir `"$ProjectDir`""
-    $Shortcut.WorkingDirectory = Split-Path $ScriptPath
-    $Shortcut.IconLocation = "powershell.exe"
-    $Shortcut.Save()
+    $vbScriptContent = @"
+Set oWS = WScript.CreateObject("WScript.Shell")
+sLinkFile = "$shortcutPath"
+Set oLink = oWS.CreateShortcut(sLinkFile)
+oLink.TargetPath = "powershell.exe"
+oLink.Arguments = "-NoProfile -WindowStyle Minimized -ExecutionPolicy Bypass -File ""$ScriptPath"" -ProjectDir ""$ProjectDir"""
+oLink.WorkingDirectory = "$(Split-Path $ScriptPath)"
+oLink.WindowStyle = 7
+oLink.IconLocation = "powershell.exe"
+oLink.Save()
+"@
+
+    Set-Content -Path $vbscriptPath -Value $vbScriptContent
+    cscript //nologo $vbscriptPath
+    Remove-Item -Path $vbscriptPath
 
     Write-Host "Shortcut created at $shortcutPath"
 }

@@ -105,7 +105,7 @@ build-backend = "poetry.core.masonry.api"
 
     # Installing dependencies
     Write-Host "Installing dependencies..."
-    poetry install
+    poetry install --no-root
     if ($LASTEXITCODE -ne 0) {
         Write-Error "Failed to install dependencies."
         Exit

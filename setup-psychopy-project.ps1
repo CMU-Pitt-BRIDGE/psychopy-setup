@@ -22,11 +22,27 @@
 #>
 
 param (
-    [string] $ProjectDir = "psychopy_project",
+    [string] $ProjectDir = Join-Path -Path $env:USERPROFILE -ChildPath "psychopy_project"
     [string] $PythonVersion = "3.8.10",
     [string] $PsychoPyVersion = "2023.2.3",
     [Switch] $Uninstall = $False
 )
+
+Function CommandExists {
+    param (
+        [string]$Command
+    )
+    $exists = $false
+    try {
+        if (Get-Command $Command -ErrorAction Stop) {
+            $exists = $true
+        }
+    }
+    catch {
+        $exists = $false
+    }
+    return $exists
+}
 
 Function Install-PsychoPyProject {
     # Extract a valid project name from the directory name
@@ -48,42 +64,60 @@ Function Install-PsychoPyProject {
 
     # Setting local Python version using pyenv
     Write-Host "Setting Python version to $PythonVersion..."
-    pyenv local $PythonVersion -ErrorAction Stop
-
-    # Creating a new Poetry project
-    Write-Host "Initializing new Poetry project..."
-    poetry new $projectName -n -ErrorAction Stop
+    # Try setting the local Python version with pyenv
+    pyenv local $PythonVersion
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "pyenv specific python requisite didn't meet. Project is using a different version of python."
+        # Handle the error, for example, by installing the required Python version
+        pyenv install $PythonVersion
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "Failed to install Python version $PythonVersion"
+            Exit
+        }
+        pyenv local $PythonVersion
+    }
 
     # Generating pyproject.toml
     $pyprojectContent = @"
-    [tool.poetry]
-    name = "$projectName"
-    version = "0.1.0"
-    description = "A project for PsychoPy $PsychoPyVersion with Python $PythonVersion"
-    authors = ["Eduardo Diniz <edd32@pitt.edu>"]
+[tool.poetry]
+name = "$projectName"
+version = "0.1.0"
+description = "A project for PsychoPy $PsychoPyVersion with Python $PythonVersion"
+authors = ["Eduardo Diniz <edd32@pitt.edu>"]
 
-    [tool.poetry.dependencies]
-    python = "$PythonVersion"
-    pyqt5 = "5.15.2"
-    psychopy = {extras = ["all"], version = "$PsychoPyVersion"}
+[tool.poetry.dependencies]
+python = "$PythonVersion"
+pyqt5 = "5.15.2"
+psychopy = {extras = ["all"], version = "$PsychoPyVersion"}
 
-    [tool.poetry.dev-dependencies]
+[tool.poetry.dev-dependencies]
 
-    [tool.poetry]
-    virtualenvs.in-project = true
-
-    [build-system]
-    requires = ["poetry-core>=1.0.0"]
-    build-backend = "poetry.core.masonry.api"
-
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
 "@
 
-    Set-Content -Path ".\$projectName\pyproject.toml" -Value $pyprojectContent -ErrorAction Stop
+    Set-Content -Path ".\$projectName\pyproject.toml" -Value $pyprojectContent
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Failed to create pyproject.toml."
+        Exit
+    }
 
     # Installing dependencies
-    cd $projectName
     Write-Host "Installing dependencies..."
-    poetry install -ErrorAction Stop
+    poetry install
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Failed to install dependencies."
+        Exit
+    }
+    
+    # Setup local virtual environment    
+    Write-Host "Creating local virtual environment..."
+    poetry config virtualenvs.create true --local
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Failed to set local virtual environment creation."
+        Exit
+    }
 
     Write-Host "PsychoPy project setup complete."
 }
@@ -94,14 +128,6 @@ Function Uninstall-PsychoPyProject {
     $null = Remove-Item -Path $ProjectDir -Recurse -Force -ErrorAction SilentlyContinue
 
     Write-Host "PsychoPy project removed."
-}
-
-Function CommandExists($cmd) {
-    $exists = $false
-    If (Get-Command $cmd -ErrorAction SilentlyContinue) {
-        $exists = $true
-    }
-    Return $exists
 }
 
 If ($Uninstall) {

@@ -157,28 +157,3 @@ Function Main {
 }
 
 Main
-
-# Save the Script: Copy the entire script and save it into a file with a .ps1 extension, such as uninstall-pyenv.ps1.
-
-# Open PowerShell: Open a PowerShell window. You might need to run it as an administrator depending on your system's settings.
-
-# Set Execution Policy (if needed): PowerShell scripts are often restricted from running by default for security reasons. To allow the execution of the script, you may need to change the execution policy. You can do this by running:
-
-# Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-
-#This command will allow scripts to be run on your PowerShell session.
-
-# Navigate to the Script: Use the cd command to navigate to the directory where you saved the script. For example:
-
-# cd path\to\directory
-# Replace path\to\directory with the actual path where your script is saved.
-
-# Run the Script with the Uninstall Parameter: Now, execute the script with the -Uninstall switch to initiate the uninstallation process. Here's how you do it:
-
-# .\uninstall-pyenv.ps1 -Uninstall
-
-# This command runs the script and activates the uninstallation function within it.
-
-# Follow Any On-screen Instructions: The script may provide instructions or confirmations as it runs. Follow these as necessary.
-
-# Check if Uninstallation was Successful: After running the script, you can verify that pyenv-win has been uninstalled by trying to run pyenv --version in a new PowerShell window. If it's uninstalled, this command should not be recognized.

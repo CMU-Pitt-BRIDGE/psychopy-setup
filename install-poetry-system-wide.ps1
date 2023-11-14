@@ -15,7 +15,7 @@
     None.
 
     .EXAMPLE
-    PS> .\install-poetry-system-wide.ps1
+    PS> .\install-poetry-system-wide.ps1 [-Uninstall]
 
     .LINK
     Online version: https://python-poetry.org/docs/
@@ -50,12 +50,12 @@ Function Remove-Poetry {
 Function Install-Poetry {
     Write-Host "Installing Poetry..."
     New-Item -Path $poetryHome -ItemType Directory -Force
-    
+
     [System.Environment]::SetEnvironmentVariable('POETRY_HOME', "${poetryHome}\", "Machine")
 
     (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -
-    
-    # Update PATH 
+
+    # Update PATH
     $pathParts = [System.Environment]::GetEnvironmentVariable('PATH', "Machine") -split ";"
     # Remove existing paths, so we don't add duplicates
     $newPathParts = $pathParts.Where{ $_ -ne $poetryPath }
@@ -80,10 +80,3 @@ Function Main {
 }
 
 Main
-
-
-# Save the script into a file with a .ps1 extension, such as install-poetry-system-wide.ps1.
-# Run PowerShell as an administrator.
-# Change the execution policy if needed (using Set-ExecutionPolicy as described in previous responses).
-# Execute the script using . \install-poetry-system-wide.ps1 to install or . \install-poetry-system-wide.ps1 -Uninstall to uninstall Poetry.
-# Restart your system after installation or uninstallation for the changes to take effect.

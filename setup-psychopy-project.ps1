@@ -18,7 +18,7 @@
     If set, the script will remove the PsychoPy project and its environment.
 
     .EXAMPLE
-    PS> .\setup-psychopy-project.ps1 -ProjectDir "my_psychopy_project" -PythonVersion "3.8.10" -PsychoPyVersion "2023.2.3"
+    PS> .\setup-psychopy-project.ps1 -ProjectDir "my_psychopy_project" -PythonVersion "3.8.10" -PsychoPyVersion "2023.2.3" [-Uninstall]
 #>
 
 param (
@@ -102,15 +102,15 @@ build-backend = "poetry.core.masonry.api"
         Write-Error "Failed to create pyproject.toml."
         Exit
     }
-    
-    # Setup local virtual environment    
+
+    # Setup local virtual environment
     Write-Host "Creating local virtual environment..."
     poetry config virtualenvs.create true --local
     if ($LASTEXITCODE -ne 0) {
         Write-Error "Failed to set local virtual environment creation."
         Exit
     }
-    
+
     # Installing dependencies
     Write-Host "Installing dependencies..."
     poetry install --no-root
@@ -135,8 +135,3 @@ If ($Uninstall) {
 } Else {
     Install-PsychoPyProject
 }
-
-# Install: To install, run the script with optional parameters for project directory, Python version, and PsychoPy version:
-# .\setup-psychopy-project.ps1 -ProjectDir "my_psychopy_project" -PythonVersion "3.8.10" -PsychoPyVersion "2023.2.3"
-# Uninstall: To uninstall, use the -Uninstall switch:
-# .\setup-psychopy-project.ps1 -ProjectDir "my_psychopy_project" -Uninstall

@@ -33,7 +33,3 @@ If (-not $ProjectDir) {
 }
 
 Start-PsychoPy
-
-# It can be run with a specified project directory like this:
-
-# .\run-psychopy.ps1 -ProjectDir "C:\Path\To\Your\PsychoPyProject"

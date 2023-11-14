@@ -51,9 +51,3 @@ If (-not $ScriptPath -or -not $ProjectDir) {
 }
 
 Create-Shortcut
-
-# Run it with the full path to your run-psychopy.ps1 script and the project directory like this:
-
-#.\create-psychopy-shortcut.ps1 -ScriptPath "C:\Path\To\run-psychopy.ps1" -ProjectDir "C:\Path\To\Your\PsychoPyProject"
-
-# This will create a shortcut on your desktop that, when clicked, will open a minimized PowerShell window and execute the run-psychopy.ps1 script for your specified project directory.
